@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AgentIA — Agents IA Sur Mesure pour Entreprises</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --orange: #FF6B35;
+      --coral: #FF4D6D;
+      --amber: #FFA630;
+      --violet: #7B2FBE;
+      --violet-light: #A855F7;
+      --warm-bg: #0C0804;
+      --card-bg: #17100A;
+      --card-border: #2A1A08;
+      --text: #F5EDD8;
+      --text-muted: #9A8060;
+      --grad-main: linear-gradient(135deg, var(--orange), var(--coral), var(--violet));
+      --grad-warm: linear-gradient(135deg, var(--amber), var(--orange));
+    }
+    *{margin:0;padding:0;box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{font-family:'DM Sans',sans-serif;background:var(--warm-bg);color:var(--text);overflow-x:hidden;line-height:1.6}
+    body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");pointer-events:none;z-index:9998}
+
+    /* NAV */
+    nav{position:fixed;top:0;width:100%;z-index:100;padding:1.1rem 2rem;display:flex;justify-content:space-between;align-items:center;backdrop-filter:blur(20px);background:rgba(12,8,4,0.85);border-bottom:1px solid rgba(255,107,53,0.08)}
+    .logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1.35rem;background:var(--grad-warm);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-decoration:none}
+    .nav-links{display:flex;gap:2rem;list-style:none;align-items:center}
+    .nav-links a{color:var(--text-muted);text-decoration:none;font-size:0.88rem;font-weight:500;transition:color .2s}
+    .nav-links a:hover{color:var(--orange)}
+    .nav-cta{background:var(--grad-warm)!important;-webkit-background-clip:unset!important;-webkit-text-fill-color:white!important;background-clip:unset!important;color:white!important;padding:.45rem 1.1rem;border-radius:50px;font-weight:600!important}
+    .nav-cta:hover{opacity:.85;color:white!important}
+    .hamburger{display:none;cursor:pointer;flex-direction:column;gap:5px}
+    .hamburger span{width:24px;height:2px;background:var(--text);border-radius:2px;display:block;transition:all .3s}
+    .mobile-menu{display:none;position:fixed;top:64px;left:0;right:0;background:rgba(12,8,4,0.97);backdrop-filter:blur(20px);padding:1.5rem 2rem;z-index:99;border-bottom:1px solid var(--card-border)}
+    .mobile-menu.open{display:flex;flex-direction:column;gap:1rem}
+    .mobile-menu a{color:var(--text);text-decoration:none;font-size:1rem;padding:.5rem 0;border-bottom:1px solid var(--card-border)}
+
+    /* HERO */
+    #hero{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:7rem 2rem 4rem;position:relative;overflow:hidden}
+    .glow{position:absolute;border-radius:50%;filter:blur(120px);opacity:.12;pointer-events:none}
+    .g1{width:700px;height:700px;background:var(--orange);top:-150px;left:-250px;animation:floatA 9s ease-in-out infinite}
+    .g2{width:600px;height:600px;background:var(--violet);bottom:-150px;right:-200px;animation:floatB 11s ease-in-out infinite}
+    .g3{width:350px;height:350px;background:var(--coral);top:50%;left:50%;transform:translate(-50%,-50%);animation:floatA 7s ease-in-out infinite .5s}
+    @keyframes floatA{0%,100%{transform:translateY(0)}50%{transform:translateY(-35px)}}
+    @keyframes floatB{0%,100%{transform:translateY(0)}50%{transform:translateY(25px)}}
+    .hero-inner{position:relative;z-index:2;max-width:820px;margin:0 auto}
+    .badge{display:inline-flex;align-items:center;gap:.5rem;background:rgba(255,107,53,.08);border:1px solid rgba(255,107,53,.25);padding:.35rem 1rem;border-radius:50px;font-size:.8rem;color:var(--amber);margin-bottom:2rem;animation:fadeUp .8s ease forwards}
+    .badge-dot{width:7px;height:7px;border-radius:50%;background:var(--orange);animation:blink 2s infinite}
+    @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+    h1{font-family:'Syne',sans-serif;font-size:clamp(2.6rem,7vw,5.2rem);font-weight:800;line-height:1.05;margin-bottom:1.4rem;animation:fadeUp .8s ease .1s both}
+    .grad-text{background:var(--grad-main);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .hero-sub{font-size:clamp(1rem,2.2vw,1.2rem);color:var(--text-muted);max-width:580px;margin:0 auto 2.5rem;font-weight:300;animation:fadeUp .8s ease .2s both}
+    .btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;animation:fadeUp .8s ease .3s both}
+    .btn-p{background:var(--grad-main);color:#fff;padding:.85rem 2rem;border-radius:50px;font-weight:600;text-decoration:none;border:none;cursor:pointer;font-size:.95rem;transition:transform .2s,box-shadow .2s;box-shadow:0 0 30px rgba(255,107,53,.3);font-family:'DM Sans',sans-serif}
+    .btn-p:hover{transform:translateY(-2px);box-shadow:0 10px 40px rgba(255,107,53,.4)}
+    .btn-s{background:transparent;color:var(--text);padding:.85rem 2rem;border-radius:50px;font-weight:500;text-decoration:none;border:1px solid rgba(255,255,255,.12);font-size:.95rem;transition:all .2s;display:inline-block}
+    .btn-s:hover{border-color:var(--orange);background:rgba(255,107,53,.05)}
+    .stats{display:flex;justify-content:center;gap:3.5rem;margin-top:5rem;flex-wrap:wrap;animation:fadeUp .8s ease .5s both}
+    .stat-n{font-family:'Syne',sans-serif;font-size:2.5rem;font-weight:800;background:var(--grad-warm);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .stat-l{font-size:.8rem;color:var(--text-muted);margin-top:.1rem}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
+
+    /* SECTIONS */
+    section{position:relative;z-index:1;padding:6rem 2rem}
+    .container{max-width:1160px;margin:0 auto}
+    .s-tag{display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--orange);background:rgba(255,107,53,.08);border:1px solid rgba(255,107,53,.2);padding:.3rem .8rem;border-radius:50px;margin-bottom:.8rem}
+    .s-title{font-family:'Syne',sans-serif;font-size:clamp(1.9rem,4vw,2.9rem);font-weight:800;line-height:1.1;margin-bottom:.8rem}
+    .s-sub{color:var(--text-muted);font-size:1rem;line-height:1.7;font-weight:300;max-width:560px}
+
+    /* WHAT */
+    #what{background:linear-gradient(180deg,transparent,rgba(255,107,53,.025),transparent)}
+    .what-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;margin-top:3.5rem}
+    .visual-box{position:relative;height:380px}
+    .v-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:var(--card-bg);border:1px solid rgba(255,107,53,.3);border-radius:20px;padding:1.5rem 1.8rem;text-align:center;width:200px;z-index:2}
+    .v-icon{width:56px;height:56px;background:var(--grad-main);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.6rem;margin:0 auto .7rem}
+    .v-card{position:absolute;background:var(--card-bg);border:1px solid var(--card-border);border-radius:14px;padding:.85rem 1rem;font-size:.82rem}
+    .vc1{top:6%;left:0;animation:floatA 4s ease-in-out infinite}
+    .vc2{top:6%;right:0;animation:floatA 4s ease-in-out infinite 1.5s}
+    .vc3{bottom:8%;left:4%;animation:floatA 4s ease-in-out infinite .8s}
+    .vc4{bottom:8%;right:4%;animation:floatA 4s ease-in-out infinite 2s}
+    .dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--orange);margin-right:.35rem;animation:blink 2s infinite}
+    .feats{display:flex;flex-direction:column;gap:1.4rem}
+    .feat{display:flex;gap:.9rem;align-items:flex-start}
+    .feat-ic{width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
+    .ic-o{background:rgba(255,107,53,.12)}.ic-c{background:rgba(255,77,109,.12)}.ic-a{background:rgba(255,166,48,.12)}.ic-v{background:rgba(123,47,190,.12)}
+    .feat-t h4{font-weight:600;font-size:.95rem;margin-bottom:.2rem}
+    .feat-t p{font-size:.87rem;color:var(--text-muted)}
+
+    /* HOW */
+    #how{text-align:center}
+    .steps{display:flex;gap:0;margin-top:4rem;position:relative}
+    .step-line{position:absolute;top:48px;left:calc(16.67% + 40px);right:calc(16.67% + 40px);height:2px;background:linear-gradient(90deg,var(--orange),var(--coral),var(--violet));opacity:.25}
+    .step{flex:1;padding:0 1.2rem;display:flex;flex-direction:column;align-items:center}
+    .step-num{width:96px;height:96px;border-radius:24px;display:flex;align-items:center;justify-content:center;font-size:2rem;margin-bottom:1.5rem;position:relative;z-index:1;border:2px solid}
+    .sn1{background:rgba(255,107,53,.12);border-color:rgba(255,107,53,.35)}
+    .sn2{background:rgba(255,77,109,.12);border-color:rgba(255,77,109,.35)}
+    .sn3{background:rgba(123,47,190,.12);border-color:rgba(123,47,190,.35)}
+    .step h3{font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:700;margin-bottom:.6rem}
+    .step p{color:var(--text-muted);font-size:.88rem;line-height:1.6;max-width:240px;margin:0 auto}
+
+    /* SERVICES */
+    #services{background:linear-gradient(180deg,transparent,rgba(123,47,190,.025),transparent)}
+    .srv-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4rem;margin-top:3rem}
+    .srv{background:var(--card-bg);border:1px solid var(--card-border);border-radius:20px;padding:1.8rem;transition:transform .3s,border-color .3s,box-shadow .3s;cursor:default}
+    .srv:hover{transform:translateY(-5px);border-color:rgba(255,107,53,.28);box-shadow:0 20px 50px rgba(255,107,53,.07)}
+    .srv-em{font-size:2.2rem;margin-bottom:.9rem;display:block}
+    .srv h3{font-family:'Syne',sans-serif;font-size:1.05rem;font-weight:700;margin-bottom:.5rem}
+    .srv p{color:var(--text-muted);font-size:.85rem;line-height:1.6}
+    .srv-tag{display:inline-block;margin-top:.9rem;font-size:.72rem;font-weight:600;padding:.22rem .65rem;border-radius:50px;background:rgba(255,107,53,.08);color:var(--orange);border:1px solid rgba(255,107,53,.15)}
+
+    /* PRICING */
+    #pricing{text-align:center}
+    .price-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:3rem;align-items:start}
+    .pc{background:var(--card-bg);border:1px solid var(--card-border);border-radius:22px;padding:2.2rem 1.8rem;text-align:left;position:relative;transition:transform .3s}
+    .pc:hover{transform:translateY(-4px)}
+    .pc.feat{border-color:rgba(255,107,53,.45);background:linear-gradient(160deg,rgba(255,107,53,.05),rgba(123,47,190,.05));box-shadow:0 0 60px rgba(255,107,53,.09)}
+    .pc-badge{position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:var(--grad-main);color:#fff;font-size:.72rem;font-weight:700;padding:.28rem .9rem;border-radius:50px;white-space:nowrap}
+    .pc-name{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;color:var(--text-muted);margin-bottom:.9rem}
+    .pc-price{font-family:'Syne',sans-serif;font-size:2.8rem;font-weight:800;line-height:1;margin-bottom:.2rem}
+    .pc-price small{font-size:1.1rem;font-weight:400;color:var(--text-muted)}
+    .pc-desc{color:var(--text-muted);font-size:.82rem;margin-bottom:1.8rem;line-height:1.5}
+    .pc-feats{list-style:none;display:flex;flex-direction:column;gap:.65rem;margin-bottom:1.8rem}
+    .pc-feats li{display:flex;align-items:flex-start;gap:.55rem;font-size:.87rem}
+    .pc-feats li::before{content:'✓';color:var(--orange);font-weight:700;flex-shrink:0}
+    .pc-btn{width:100%;padding:.8rem;border-radius:11px;font-weight:600;font-size:.9rem;cursor:pointer;transition:all .2s;text-align:center;text-decoration:none;display:block;font-family:'DM Sans',sans-serif;border:none}
+    .pc-btn.p{background:var(--grad-main);color:#fff;box-shadow:0 4px 20px rgba(255,107,53,.25)}
+    .pc-btn.p:hover{box-shadow:0 8px 30px rgba(255,107,53,.4);transform:translateY(-1px)}
+    .pc-btn.o{background:transparent;color:var(--text);border:1px solid rgba(255,255,255,.12)}
+    .pc-btn.o:hover{border-color:var(--orange);background:rgba(255,107,53,.05)}
+
+    /* CONTACT */
+    #contact{background:linear-gradient(180deg,transparent,rgba(255,107,53,.025),transparent)}
+    .contact-w{display:grid;grid-template-columns:1fr 1.5fr;gap:4rem;margin-top:3rem;align-items:start}
+    .ci h3{font-family:'Syne',sans-serif;font-size:1.7rem;font-weight:700;margin-bottom:.8rem}
+    .ci p{color:var(--text-muted);line-height:1.7;margin-bottom:1.8rem;font-size:.95rem}
+    .cpts{display:flex;flex-direction:column;gap:.9rem}
+    .cpt{display:flex;align-items:center;gap:.7rem;font-size:.9rem}
+    .cpt-ic{width:38px;height:38px;border-radius:10px;background:rgba(255,107,53,.08);display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;border:1px solid rgba(255,107,53,.12)}
+    .cform{background:var(--card-bg);border:1px solid var(--card-border);border-radius:22px;padding:2.2rem}
+    .frow{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+    .fg{margin-bottom:1.1rem}
+    .fg label{display:block;font-size:.8rem;font-weight:500;color:var(--text-muted);margin-bottom:.35rem}
+    .fg input,.fg textarea,.fg select{width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);color:var(--text);padding:.7rem .9rem;border-radius:11px;font-family:'DM Sans',sans-serif;font-size:.9rem;transition:border-color .2s;outline:none}
+    .fg input:focus,.fg textarea:focus,.fg select:focus{border-color:rgba(255,107,53,.45)}
+    .fg textarea{resize:vertical;min-height:110px}
+    .fg select option{background:#17100a}
+    .fsub{width:100%;padding:.85rem;background:var(--grad-main);color:#fff;border:none;border-radius:11px;font-family:'DM Sans',sans-serif;font-size:.95rem;font-weight:600;cursor:pointer;transition:opacity .2s,transform .2s}
+    .fsub:hover{opacity:.9;transform:translateY(-1px)}
+    .fsuccess{display:none;text-align:center;padding:1rem;color:var(--orange);font-weight:600;margin-top:.5rem}
+
+    /* FOOTER */
+    footer{border-top:1px solid rgba(255,255,255,.05);padding:2rem;text-align:center;color:var(--text-muted);font-size:.82rem;position:relative;z-index:1}
+    footer a{color:var(--orange);text-decoration:none}
+
+    /* CHATBOT */
+    .chat-wrap{position:fixed;bottom:2rem;right:2rem;z-index:9999}
+    .chat-btn{width:62px;height:62px;border-radius:50%;background:var(--grad-main);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.5rem;box-shadow:0 8px 28px rgba(255,107,53,.4);transition:transform .3s,box-shadow .3s;position:relative}
+    .chat-btn:hover{transform:scale(1.08);box-shadow:0 12px 38px rgba(255,107,53,.5)}
+    .chat-notif{position:absolute;top:-3px;right:-3px;width:18px;height:18px;background:var(--coral);border-radius:50%;border:2px solid var(--warm-bg);font-size:.62rem;font-weight:700;color:#fff;display:flex;align-items:center;justify-content:center}
+    .chat-win{position:absolute;bottom:76px;right:0;width:370px;background:var(--card-bg);border:1px solid rgba(255,107,53,.18);border-radius:20px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.55);display:none;flex-direction:column;max-height:540px}
+    .chat-win.open{display:flex;animation:chat-open .28s ease}
+    @keyframes chat-open{from{opacity:0;transform:translateY(18px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+    .chat-head{padding:1.1rem 1.4rem;background:linear-gradient(135deg,rgba(255,107,53,.12),rgba(123,47,190,.12));border-bottom:1px solid rgba(255,107,53,.12);display:flex;align-items:center;justify-content:space-between}
+    .chat-head-left{display:flex;align-items:center;gap:.8rem}
+    .chat-av{width:38px;height:38px;border-radius:50%;background:var(--grad-main);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
+    .chat-head h4{font-weight:600;font-size:.9rem}
+    .chat-status{font-size:.72rem;color:#4ade80;display:flex;align-items:center;gap:.3rem}
+    .chat-status::before{content:'';width:5px;height:5px;border-radius:50%;background:#4ade80;display:inline-block;animation:blink 2s infinite}
+    .chat-close{background:transparent;border:none;color:var(--text-muted);cursor:pointer;font-size:1.2rem;padding:.2rem;line-height:1;transition:color .2s}
+    .chat-close:hover{color:var(--text)}
+    .chat-msgs{flex:1;overflow-y:auto;padding:1rem;display:flex;flex-direction:column;gap:.75rem;max-height:340px}
+    .chat-msgs::-webkit-scrollbar{width:3px}
+    .chat-msgs::-webkit-scrollbar-thumb{background:rgba(255,255,255,.08);border-radius:2px}
+    .msg{display:flex;gap:.4rem;align-items:flex-end}
+    .msg.user{flex-direction:row-reverse}
+    .bubble{max-width:78%;padding:.65rem .9rem;border-radius:15px;font-size:.84rem;line-height:1.5}
+    .msg.bot .bubble{background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.07);border-bottom-left-radius:4px}
+    .msg.user .bubble{background:linear-gradient(135deg,var(--orange),var(--coral));color:#fff;border-bottom-right-radius:4px}
+    .m-av{width:26px;height:26px;border-radius:50%;background:var(--grad-main);display:flex;align-items:center;justify-content:center;font-size:.75rem;flex-shrink:0}
+    .typing{display:flex;gap:4px;padding:.5rem .7rem;align-items:center}
+    .tdot{width:5px;height:5px;border-radius:50%;background:var(--text-muted);animation:bounce 1.2s infinite}
+    .tdot:nth-child(2){animation-delay:.2s}.tdot:nth-child(3){animation-delay:.4s}
+    @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+    .chat-sugs{display:flex;flex-wrap:wrap;gap:.4rem;padding:.5rem 1rem;border-top:1px solid rgba(255,255,255,.05)}
+    .sug-btn{background:rgba(255,107,53,.08);border:1px solid rgba(255,107,53,.18);color:var(--orange);padding:.3rem .65rem;border-radius:50px;font-size:.75rem;cursor:pointer;transition:background .2s;font-family:'DM Sans',sans-serif}
+    .sug-btn:hover{background:rgba(255,107,53,.18)}
+    .chat-inp-area{padding:.85rem 1rem;border-top:1px solid rgba(255,255,255,.05);display:flex;gap:.5rem}
+    .chat-inp{flex:1;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.07);color:var(--text);padding:.65rem .9rem;border-radius:11px;font-family:'DM Sans',sans-serif;font-size:.85rem;outline:none;transition:border-color .2s}
+    .chat-inp:focus{border-color:rgba(255,107,53,.38)}
+    .chat-inp::placeholder{color:var(--text-muted)}
+    .chat-send{width:38px;height:38px;border-radius:10px;background:var(--grad-warm);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.95rem;transition:opacity .2s,transform .2s;flex-shrink:0}
+    .chat-send:hover{opacity:.85;transform:scale(1.05)}
+
+    /* REVEAL */
+    .reveal{opacity:0;transform:translateY(36px);transition:opacity .7s ease,transform .7s ease}
+    .reveal.vis{opacity:1;transform:translateY(0)}
+
+    /* RESPONSIVE */
+    @media(max-width:900px){
+      .nav-links{display:none}
+      .hamburger{display:flex}
+      .what-grid{grid-template-columns:1fr}
+      .visual-box{height:240px;margin-bottom:1.5rem}
+      .srv-grid{grid-template-columns:1fr 1fr}
+      .price-grid{grid-template-columns:1fr;max-width:400px;margin:3rem auto 0}
+      .contact-w{grid-template-columns:1fr}
+      .steps{flex-direction:column;align-items:center;gap:2rem}
+      .step-line{display:none}
+      .step{max-width:320px}
+      .frow{grid-template-columns:1fr}
+    }
+    @media(max-width:580px){
+      .srv-grid{grid-template-columns:1fr}
+      .chat-win{width:310px;right:-4px}
+      .stats{gap:1.5rem}
+      section{padding:4.5rem 1.2rem}
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="logo" href="#">⚡ AgentIA</a>
+  <ul class="nav-links">
+    <li><a href="#what">C'est quoi ?</a></li>
+    <li><a href="#how">Processus</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#pricing">Tarifs</a></li>
+    <li><a href="#contact" class="nav-cta">Démarrer →</a></li>
+  </ul>
+  <div class="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#what" onclick="toggleMenu()">C'est quoi un agent IA ?</a>
+  <a href="#how" onclick="toggleMenu()">Comment ça marche ?</a>
+  <a href="#services" onclick="toggleMenu()">Mes services</a>
+  <a href="#pricing" onclick="toggleMenu()">Tarifs</a>
+  <a href="#contact" onclick="toggleMenu()" style="color:var(--orange);font-weight:600">Démarrer mon projet →</a>
+</div>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="glow g1"></div>
+  <div class="glow g2"></div>
+  <div class="glow g3"></div>
+  <div class="hero-inner">
+    <div class="badge"><div class="badge-dot"></div> Agent opérationnel en 2 semaines chrono</div>
+    <h1>Votre business<br><span class="grad-text">propulsé par des agents IA</span><br>sur mesure</h1>
+    <p class="hero-sub">Je conçois des agents IA qui travaillent pour vous 24h/24 — réponses clients, prises de RDV, FAQ, suivi des ventes. Sans effort de votre côté.</p>
+    <div class="btns">
+      <a href="#contact" class="btn-p">🚀 Lancer mon projet IA</a>
+      <a href="#what" class="btn-s">Comprendre les agents IA →</a>
+    </div>
+    <div class="stats">
+      <div><div class="stat-n">24/7</div><div class="stat-l">Disponibilité totale</div></div>
+      <div><div class="stat-n">-80%</div><div class="stat-l">Tâches répétitives</div></div>
+      <div><div class="stat-n">2 sem.</div><div class="stat-l">Délai de livraison</div></div>
+      <div><div class="stat-n">×10</div><div class="stat-l">Capacité de traitement</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT IS AN AI AGENT -->
+<section id="what">
+  <div class="container">
+    <div class="what-grid">
+      <div class="visual-box reveal">
+        <div class="v-card vc1"><span class="dot"></span><span style="color:var(--text-muted);font-size:.78rem">Client à 2h du matin</span><br><span style="font-size:.83rem">"Où est ma commande ?"</span></div>
+        <div class="v-card vc2"><span style="font-size:.78rem;color:var(--text-muted)">✅ Réponse en 0,3 sec</span><br><span style="font-size:.83rem">Livraison demain 📦</span></div>
+        <div class="v-center">
+          <div class="v-icon">🤖</div>
+          <strong style="font-size:.95rem">Votre Agent IA</strong>
+          <div style="font-size:.75rem;color:var(--text-muted);margin-top:.25rem">Actif en permanence</div>
+        </div>
+        <div class="v-card vc3"><span style="font-size:.78rem;color:var(--text-muted)">📅 RDV confirmé</span><br><span style="font-size:.83rem">Lundi 14h — agenda ✓</span></div>
+        <div class="v-card vc4"><span style="font-size:.78rem;color:var(--text-muted)">💬 FAQ traitée</span><br><span style="font-size:.83rem">+340 réponses ce mois</span></div>
+      </div>
+      <div class="reveal" style="transition-delay:.15s">
+        <div class="s-tag">Comprendre</div>
+        <h2 class="s-title">C'est quoi un <span class="grad-text">agent IA ?</span></h2>
+        <p class="s-sub" style="margin-bottom:2rem">Un agent IA, c'est comme un collaborateur virtuel ultra-intelligent : il comprend le langage naturel, prend des décisions et agit en autonomie — sans jamais se fatiguer ni prendre de vacances.</p>
+        <div class="feats">
+          <div class="feat"><div class="feat-ic ic-o">💬</div><div class="feat-t"><h4>Il comprend vraiment</h4><p>Il saisit le contexte et l'intention derrière les mots, comme un humain — pas juste des mots-clés.</p></div></div>
+          <div class="feat"><div class="feat-ic ic-c">⚡</div><div class="feat-t"><h4>Il agit en autonomie</h4><p>Réserver un RDV, répondre à une question, envoyer un email — sans intervention humaine.</p></div></div>
+          <div class="feat"><div class="feat-ic ic-a">🎯</div><div class="feat-t"><h4>Il s'adapte à votre métier</h4><p>Chaque agent est formé sur votre activité, vos produits et votre ton de communication.</p></div></div>
+          <div class="feat"><div class="feat-ic ic-v">🔗</div><div class="feat-t"><h4>Il se connecte à vos outils</h4><p>CRM, agenda, site web, WhatsApp, email — il s'intègre partout où vous travaillez.</p></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how">
+  <div class="container">
+    <div class="reveal" style="text-align:center">
+      <div class="s-tag">Le processus</div>
+      <h2 class="s-title">3 étapes pour votre<br><span class="grad-text">agent IA</span></h2>
+      <p class="s-sub" style="margin:0 auto">De l'idée à l'agent opérationnel, un processus simple, rapide et transparent.</p>
+    </div>
+    <div class="steps reveal" style="transition-delay:.2s">
+      <div class="step-line"></div>
+      <div class="step"><div class="step-num sn1">🔍</div><h3>Analyse</h3><p>On identifie ensemble vos besoins, processus à automatiser et objectifs. Un appel de 45 min suffit.</p></div>
+      <div class="step"><div class="step-num sn2">🛠️</div><h3>Création</h3><p>Je conçois et programme votre agent sur mesure, le forme sur votre activité et le connecte à vos outils.</p></div>
+      <div class="step"><div class="step-num sn3">🚀</div><h3>Déploiement</h3><p>Votre agent est mis en ligne, testé et opérationnel. Je reste disponible pour ajustements et évolutions.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="container">
+    <div class="reveal">
+      <div class="s-tag">Ce que je fais</div>
+      <h2 class="s-title">Mes agents IA <span class="grad-text">spécialisés</span></h2>
+      <p class="s-sub">Des agents conçus pour les besoins les plus courants, adaptés à votre secteur et vos outils existants.</p>
+    </div>
+    <div class="srv-grid reveal" style="transition-delay:.15s">
+      <div class="srv"><span class="srv-em">💬</span><h3>Agent Service Client</h3><p>Répond aux questions courantes 24h/24, gère les réclamations simples et escalade si nécessaire vers un humain.</p><span class="srv-tag">Réactivité +90%</span></div>
+      <div class="srv"><span class="srv-em">📅</span><h3>Agent Prise de RDV</h3><p>Qualifie les prospects, vérifie vos disponibilités et réserve automatiquement dans votre agenda. Zéro double-booking.</p><span class="srv-tag">Agenda automatisé</span></div>
+      <div class="srv"><span class="srv-em">📚</span><h3>Agent FAQ & Support</h3><p>Répond instantanément aux questions fréquentes basées sur votre documentation, produits ou services.</p><span class="srv-tag">Traitement ×10</span></div>
+      <div class="srv"><span class="srv-em">🛒</span><h3>Agent Commercial</h3><p>Qualifie vos leads entrants, présente vos offres et guide le prospect jusqu'à la prise de contact.</p><span class="srv-tag">Conversion +35%</span></div>
+      <div class="srv"><span class="srv-em">📊</span><h3>Agent Reporting</h3><p>Collecte, analyse et synthétise vos données clés — génère des rapports automatiques sur vos KPIs.</p><span class="srv-tag">Gain 5h/semaine</span></div>
+      <div class="srv"><span class="srv-em">✉️</span><h3>Agent Email & Suivi</h3><p>Trie, classe et répond à vos emails, gère les relances clients et assure le suivi commercial en continu.</p><span class="srv-tag">Boîte mail maîtrisée</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing">
+  <div class="container">
+    <div class="reveal">
+      <div class="s-tag">Investissement</div>
+      <h2 class="s-title">Des tarifs clairs,<br><span class="grad-text">sans surprise</span></h2>
+      <p class="s-sub" style="margin:0 auto">Trois formules pour s'adapter à votre taille et vos ambitions. Tout projet peut être discuté.</p>
+    </div>
+    <div class="price-grid reveal" style="transition-delay:.15s">
+      <div class="pc">
+        <div class="pc-name">⚡ Basique</div>
+        <div class="pc-price">490€ <small>/ mois</small></div>
+        <div class="pc-desc">Idéal pour démarrer et automatiser une tâche précise rapidement.</div>
+        <ul class="pc-feats">
+          <li>1 agent IA sur mesure</li>
+          <li>1 intégration (site ou email)</li>
+          <li>Formation sur vos données</li>
+          <li>Déploiement en 2 semaines</li>
+          <li>Support par email</li>
+        </ul>
+        <a href="#contact" class="pc-btn o">Démarrer →</a>
+      </div>
+      <div class="pc feat">
+        <div class="pc-badge">⭐ Le plus populaire</div>
+        <div class="pc-name">🔥 Pro</div>
+        <div class="pc-price">990€ <small>/ mois</small></div>
+        <div class="pc-desc">Pour les entreprises qui veulent automatiser plusieurs processus clés.</div>
+        <ul class="pc-feats">
+          <li>Jusqu'à 3 agents IA</li>
+          <li>3 intégrations (CRM, agenda, email…)</li>
+          <li>Formation avancée sur vos données</li>
+          <li>Tableau de bord de suivi</li>
+          <li>Support prioritaire 48h</li>
+          <li>1 optimisation mensuelle</li>
+        </ul>
+        <a href="#contact" class="pc-btn p">Choisir Pro →</a>
+      </div>
+      <div class="pc">
+        <div class="pc-name">🏆 Sur Mesure</div>
+        <div class="pc-price">Sur devis</div>
+        <div class="pc-desc">Pour les projets complexes avec des besoins spécifiques et une vision long terme.</div>
+        <ul class="pc-feats">
+          <li>Agents illimités</li>
+          <li>Intégrations illimitées</li>
+          <li>Architecture IA personnalisée</li>
+          <li>Accompagnement dédié</li>
+          <li>Support 24/7</li>
+          <li>Évolutions continues incluses</li>
+        </ul>
+        <a href="#contact" class="pc-btn o">Nous contacter →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="container">
+    <div class="reveal">
+      <div class="s-tag">Me contacter</div>
+      <h2 class="s-title">Parlons de votre<br><span class="grad-text">projet IA</span></h2>
+    </div>
+    <div class="contact-w reveal" style="transition-delay:.15s">
+      <div class="ci">
+        <h3>Prêt à automatiser votre activité ?</h3>
+        <p>Décrivez-moi votre besoin et je vous réponds sous 24h avec une proposition adaptée à votre situation.</p>
+        <div class="cpts">
+        <div class="cpt"><div class="cpt-ic">📧</div> <a href="mailto:cadjeenail@gmail.com" style="color:var(--text);text-decoration:none">cadjeenail@gmail.com</a></div>
+          <div class="cpt"><div class="cpt-ic">📍</div> La Réunion — France</div>
+          <div class="cpt"><div class="cpt-ic">⚡</div> Réponse garantie sous 24h</div>
+          <div class="cpt"><div class="cpt-ic">🎯</div> Premier appel offert (30 min)</div>
+        </div>
+      </div>
+      <div class="cform">
+        <form action="https://formspree.io/f/mbdzpjao" method="POST" onsubmit="handleSubmit(event)">
+          <div class="frow">
+            <div class="fg"><label>Prénom *</label><input type="text" name="prenom" required placeholder="Marie"></div>
+            <div class="fg"><label>Nom *</label><input type="text" name="nom" required placeholder="Dupont"></div>
+          </div>
+          <div class="fg"><label>Email *</label><input type="email" name="email" required placeholder="marie@entreprise.fr"></div>
+          <div class="fg"><label>Entreprise</label><input type="text" name="entreprise" placeholder="Mon Entreprise SARL"></div>
+          <div class="fg">
+            <label>Type d'agent souhaité</label>
+            <select name="type-agent">
+              <option value="">Choisissez…</option>
+              <option>Agent Service Client</option>
+              <option>Agent Prise de RDV</option>
+              <option>Agent FAQ & Support</option>
+              <option>Agent Commercial</option>
+              <option>Agent Reporting</option>
+              <option>Agent Email & Suivi</option>
+              <option>Autre / Je ne sais pas encore</option>
+            </select>
+          </div>
+          <div class="fg"><label>Votre besoin *</label><textarea name="message" required placeholder="Décrivez votre projet, vos objectifs, vos outils actuels…"></textarea></div>
+          <button type="submit" class="fsub">🚀 Envoyer ma demande</button>
+          <div class="fsuccess" id="fsuccess">✅ Message envoyé ! Je vous réponds sous 24h.</div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>© 2025 <a href="#">AgentIA</a> — Agents IA sur mesure pour entreprises · La Réunion, France</p>
+</footer>
+
+<!-- CHATBOT -->
+<div class="chat-wrap">
+  <div class="chat-win" id="chatWin">
+    <div class="chat-head">
+      <div class="chat-head-left">
+        <div class="chat-av">🤖</div>
+        <div>
+          <h4>Assistant AgentIA</h4>
+          <div class="chat-status">En ligne maintenant</div>
+        </div>
+      </div>
+      <button class="chat-close" onclick="toggleChat()">✕</button>
+    </div>
+    <div class="chat-msgs" id="chatMsgs">
+      <div class="msg bot">
+        <div class="m-av">🤖</div>
+        <div class="bubble">Bonjour ! 👋 Je suis l'assistant IA d'AgentIA. Posez-moi vos questions sur nos services, tarifs ou délais — je suis là pour vous aider !</div>
+      </div>
+    </div>
+    <div class="chat-sugs" id="chatSugs">
+      <button class="sug-btn" onclick="quickSend('Quels sont vos services ?')">Services ?</button>
+      <button class="sug-btn" onclick="quickSend('Combien ça coûte ?')">Tarifs ?</button>
+      <button class="sug-btn" onclick="quickSend('Quel est le délai ?')">Délai ?</button>
+      <button class="sug-btn" onclick="quickSend('Comment démarrer ?')">Démarrer ?</button>
+    </div>
+    <div class="chat-inp-area">
+      <input class="chat-inp" id="chatInp" type="text" placeholder="Votre question…" onkeydown="if(event.key==='Enter')sendMsg()">
+      <button class="chat-send" onclick="sendMsg()">➤</button>
+    </div>
+  </div>
+  <button class="chat-btn" id="chatBtn" onclick="toggleChat()">
+    💬
+    <div class="chat-notif" id="chatNotif">1</div>
+  </button>
+</div>
+
+<script>
+// MOBILE MENU
+function toggleMenu() {
+  document.getElementById('mobileMenu').classList.toggle('open');
+}
+
+// SCROLL REVEAL
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting){e.target.classList.add('vis');obs.unobserve(e.target);}});
+},{threshold:0.1});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+// CONTACT FORM
+function handleSubmit(e) {
+  e.preventDefault();
+  const form = e.target;
+  const data = new FormData(form);
+  fetch(form.action, {
+    method: 'POST',
+    body: data,
+    headers: { 'Accept': 'application/json' }
+  }).then(r => {
+    if(r.ok){
+      form.reset();
+      const s = document.getElementById('fsuccess');
+      s.style.display='block';
+      s.textContent='✅ Message envoyé ! Je vous réponds sous 24h.';
+    } else {
+      alert('Erreur lors de l\'envoi, réessayez.');
+    }
+  }).catch(()=> alert('Erreur réseau, réessayez.'));
+}
+
+// CHATBOT
+let chatOpen = false;
+let chatHistory = [];
+
+const SYSTEM = `Tu es l'assistant IA d'AgentIA, une agence spécialisée dans la création d'agents IA sur mesure pour les entreprises. Tu es chaleureux, professionnel et concis. Réponds TOUJOURS en français en 3-4 phrases max sauf si on te demande des détails.
+
+SERVICES :
+- Agent Service Client — Répond 24h/24, gère réclamations, escalade si besoin. Réactivité +90%.
+- Agent Prise de RDV — Qualifie prospects, gère agenda automatiquement. Zéro double-booking.
+- Agent FAQ & Support — Répond aux questions fréquentes instantanément. Traitement ×10.
+- Agent Commercial — Qualifie leads, présente offres. Conversion +35%.
+- Agent Reporting — Génère rapports automatiques. Gain 5h/semaine.
+- Agent Email & Suivi — Trie, classe et répond aux emails, gère les relances.
+
+TARIFS :
+- Basique : 490€/mois — 1 agent, 1 intégration, livraison 2 semaines, support email.
+- Pro : 990€/mois — 3 agents, 3 intégrations, tableau de bord, support 48h, 1 optimisation/mois. (le plus populaire)
+- Sur Mesure : Sur devis — agents et intégrations illimités, accompagnement dédié, support 24/7.
+
+PROCESSUS : Analyse (45 min) → Création → Déploiement. Délai : 2 semaines.
+Contact : contact@agentia.fr | La Réunion, France | Premier appel offert 30 min.
+Si intérêt : oriente vers le formulaire de contact ou l'appel offert.`;
+
+function toggleChat() {
+  chatOpen = !chatOpen;
+  const win = document.getElementById('chatWin');
+  const notif = document.getElementById('chatNotif');
+  const btn = document.getElementById('chatBtn');
+  if(chatOpen){
+    win.classList.add('open');
+    notif.style.display='none';
+    btn.innerHTML='✕';
+    btn.style.fontSize='1.2rem';
+  } else {
+    win.classList.remove('open');
+    btn.innerHTML='💬<div class="chat-notif" id="chatNotif" style="display:none">1</div>';
+    btn.style.fontSize='1.5rem';
+  }
+}
+
+function quickSend(text){
+  document.getElementById('chatInp').value=text;
+  document.getElementById('chatSugs').style.display='none';
+  sendMsg();
+}
+
+function addMsg(role,text){
+  const msgs=document.getElementById('chatMsgs');
+  const d=document.createElement('div');
+  d.className='msg '+role;
+  d.innerHTML=role==='bot'
+    ?`<div class="m-av">🤖</div><div class="bubble">${text}</div>`
+    :`<div class="bubble">${text}</div>`;
+  msgs.appendChild(d);
+  msgs.scrollTop=msgs.scrollHeight;
+}
+
+function showTyping(){
+  const msgs=document.getElementById('chatMsgs');
+  const d=document.createElement('div');
+  d.className='msg bot';d.id='typing';
+  d.innerHTML=`<div class="m-av">🤖</div><div class="bubble"><div class="typing"><div class="tdot"></div><div class="tdot"></div><div class="tdot"></div></div></div>`;
+  msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight;
+}
+
+function removeTyping(){
+  const t=document.getElementById('typing');
+  if(t)t.remove();
+}
+
+const GROQ_API_KEY = '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'; // ← Collez votre clé gsk_... ici
+
+async function sendMsg(){
+  const inp=document.getElementById('chatInp');
+  const text=inp.value.trim();
+  if(!text)return;
+  inp.value='';
+  addMsg('user',text);
+  chatHistory.push({role:'user',content:text});
+  showTyping();
+  try{
+    const res=await fetch('https://api.groq.com/openai/v1/chat/completions',{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+        'Authorization':'Bearer '+GROQ_API_KEY
+      },
+      body:JSON.stringify({
+        model:'llama-3.3-70b-versatile',
+        max_tokens:400,
+        messages:[
+          {role:'system',content:SYSTEM},
+          ...chatHistory
+        ]
+      })
+    });
+    if(!res.ok){
+      const errText=await res.text();
+      console.error('Groq API error:',res.status,errText);
+      throw new Error('API error '+res.status);
+    }
+    const data=await res.json();
+    removeTyping();
+    const reply=data.choices?.[0]?.message?.content||"Désolé, une erreur est survenue. Contactez-nous à cadjeenail@gmail.com !";
+    chatHistory.push({role:'assistant',content:reply});
+    addMsg('bot',reply);
+  }catch(err){
+    console.error('Chat error:',err);
+    removeTyping();
+    addMsg('bot',"Désolé, je rencontre un problème. Contactez-nous à <a href='mailto:cadjeenail@gmail.com' style='color:var(--orange)'>cadjeenail@gmail.com</a> !");
+  }
+}
+</script>
+</body>
+</html>
