@@ -579,7 +579,7 @@ function removeTyping(){
   if(t)t.remove();
 }
 
-const GEMINI_API_KEY = 'AIzaSyDEojXtV3kjMKUoYQMtglw1L-t23vwYRhY';
+const GEMINI_API_KEY = 'AIzaSyDtggMtqrJ3d5vAdPXQjfSpv1edjkhmB0Q';
 
 async function sendMsg(){
   const inp=document.getElementById('chatInp');
@@ -590,13 +590,14 @@ async function sendMsg(){
   chatHistory.push({role:'user',parts:[{text}]});
   showTyping();
   try{
-    const res=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`,{
+    const res=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`,{
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
         systemInstruction:{parts:[{text:SYSTEM}]},
         contents:chatHistory,
-        generationConfig:{maxOutputTokens:400}
+        generationConfig:{maxOutputTokens:400},
+        thinkingConfig:{thinkingBudget:0}
       })
     });
     if(!res.ok){
