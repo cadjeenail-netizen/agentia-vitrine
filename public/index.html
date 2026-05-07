@@ -587,22 +587,16 @@ async function sendMsg(){
   if(!text)return;
   inp.value='';
   addMsg('user',text);
-  chatHistory.push({role:'user',content:text});
+  chatHistory.push({role:'user',parts:[{text}]});
   showTyping();
   try{
-    const res=await fetch('https://generativelanguage.googleapis.com/v1beta/openai/chat/completions',{
+    const res=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`,{
       method:'POST',
-      headers:{
-        'Content-Type':'application/json',
-        'Authorization':'Bearer '+GEMINI_API_KEY
-      },
+      headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
-        model:'gemini-2.0-flash',
-        max_tokens:400,
-        messages:[
-          {role:'system',content:SYSTEM},
-          ...chatHistory
-        ]
+        systemInstruction:{parts:[{text:SYSTEM}]},
+        contents:chatHistory,
+        generationConfig:{maxOutputTokens:400}
       })
     });
     if(!res.ok){
@@ -612,8 +606,8 @@ async function sendMsg(){
     }
     const data=await res.json();
     removeTyping();
-    const reply=data.choices?.[0]?.message?.content||"Désolé, une erreur est survenue. Contactez-nous à cadjeenail@gmail.com !";
-    chatHistory.push({role:'assistant',content:reply});
+    const reply=data.candidates?.[0]?.content?.parts?.[0]?.text||"Désolé, une erreur est survenue. Contactez-nous à cadjeenail@gmail.com !";
+    chatHistory.push({role:'model',parts:[{text:reply}]});
     addMsg('bot',reply);
   }catch(err){
     console.error('Chat error:',err);
