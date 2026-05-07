@@ -579,7 +579,7 @@ function removeTyping(){
   if(t)t.remove();
 }
 
-const GROQ_API_KEY = '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'; // ← Collez votre clé gsk_... ici
+const GEMINI_API_KEY = 'VOTRE_CLÉ_GEMINI_ICI'; // ← Collez votre clé AIza... depuis https://aistudio.google.com/apikey
 
 async function sendMsg(){
   const inp=document.getElementById('chatInp');
@@ -590,14 +590,14 @@ async function sendMsg(){
   chatHistory.push({role:'user',content:text});
   showTyping();
   try{
-    const res=await fetch('https://api.groq.com/openai/v1/chat/completions',{
+    const res=await fetch('https://generativelanguage.googleapis.com/v1beta/openai/chat/completions',{
       method:'POST',
       headers:{
         'Content-Type':'application/json',
-        'Authorization':'Bearer '+GROQ_API_KEY
+        'Authorization':'Bearer '+GEMINI_API_KEY
       },
       body:JSON.stringify({
-        model:'llama-3.3-70b-versatile',
+        model:'gemini-2.0-flash',
         max_tokens:400,
         messages:[
           {role:'system',content:SYSTEM},
@@ -607,7 +607,7 @@ async function sendMsg(){
     });
     if(!res.ok){
       const errText=await res.text();
-      console.error('Groq API error:',res.status,errText);
+      console.error('Gemini API error:',res.status,errText);
       throw new Error('API error '+res.status);
     }
     const data=await res.json();
