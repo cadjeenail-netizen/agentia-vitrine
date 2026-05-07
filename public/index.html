@@ -596,8 +596,7 @@ async function sendMsg(){
       body:JSON.stringify({
         systemInstruction:{parts:[{text:SYSTEM}]},
         contents:chatHistory,
-        generationConfig:{maxOutputTokens:400},
-        thinkingConfig:{thinkingBudget:0}
+        generationConfig:{maxOutputTokens:400}
       })
     });
     if(!res.ok){
